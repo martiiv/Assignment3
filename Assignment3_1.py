@@ -11,6 +11,9 @@ from sklearn.metrics import silhouette_score # We use silhouette_score to evalua
 def clusterUnlabeled ():
     samples = 350               # We define known variables
     numAttributes = 90
+    ks = []
+    sse = []
+    clusters = []
     
     #First we do some preprocessing and structuring for the unlabeled data
     txt = pd.read_csv('unlabeledData.txt', sep=' ', header=None) #Read the data from the file we separate by space
@@ -24,15 +27,27 @@ def clusterUnlabeled ():
     print("Since the min max and mean all fall between 0 and 1 we wont normalize the data")
     
     #We implemetn k means clustering using the matplotlib library
-    for i in 15:                    # For each datapoint we will do the clustering wit k=i clusters
+    for i in range(2,15):                    # For each datapoint we will do the clustering wit k=i clusters
         algorithm = KMeans(         # We define the algorithm
         init="random",              # We initialize the clusters randomly
         n_clusters=i,               # The number of clusters increase for each loop run
         n_init=10,                  # We initialize ten runs for each foor  loop run
         max_iter=100,               # We set the maximimum number of iterations to 100
-        random_state=42
-        )
+        random_state=42)
 
         algorithm.fit(df)           # We fit the algorithm to the data
+        ks.append(algorithm.n_iter_)
+        sse.append(algorithm.inertia_)
+        clusters.append(algorithm.labels_)
+    
+    #After fitting the algorithm we will evaluate the clustering using various metrics 
+    #To evaluate the clustering we will plot a graph
+    for i in range(0,14):
+        print(clusters[i])
+        
+    plt.plot(range(1,15), sse)
+    plt.xlabel("K")
+    plt.ylabel("SSE")
+    plt.show()
         
 clusterUnlabeled()
