@@ -74,7 +74,8 @@ def meanSquaredError(observedVal, perdictedVal, observations):
 
 # Importing the dataset
 df = pd.DataFrame(pd.read_csv('irisBinary.csv', sep=',', header=None))
-print(df.head)
+df.replace(('Iris-setosa', 'Iris-versicolor'), (0, 1), inplace=True)        # Labeling and making the data binary
+print(df.head())
 
 
 testInput = [5.1,3.5,1.4,0.2]
