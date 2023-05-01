@@ -12,7 +12,7 @@ def clusterUnlabeled ():
     samples = 350               # We define known variables
     numAttributes = 90
     ks = []
-    sse = []
+    wcssm = []
     clusters = []
     
     #First we do some preprocessing and structuring for the unlabeled data
@@ -37,17 +37,17 @@ def clusterUnlabeled ():
 
         algorithm.fit(df)           # We fit the algorithm to the data
         ks.append(algorithm.n_iter_)
-        sse.append(algorithm.inertia_)
+        wcssm.append(algorithm.inertia_)
         clusters.append(algorithm.labels_)
     
     #After fitting the algorithm we will evaluate the clustering using various metrics 
     #To evaluate the clustering we will plot a graph
-    for i in range(0,14):
+    for i in range(0,13):
         print(clusters[i])
         
-    plt.plot(range(1,15), sse)
+    plt.plot(range(2,15), wcssm)
     plt.xlabel("K")
-    plt.ylabel("SSE")
+    plt.ylabel("WCSS")
     plt.show()
         
 clusterUnlabeled()
