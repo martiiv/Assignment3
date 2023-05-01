@@ -29,7 +29,7 @@ def clusterUnlabeled ():
     #We implemetn k means clustering using the matplotlib library
     for i in range(2,15):                    # For each datapoint we will do the clustering wit k=i clusters
         algorithm = KMeans(         # We define the algorithm
-        init="random",              # We initialize the clusters randomly
+        init="k-means++",              # We initialize the clusters randomly
         n_clusters=i,               # The number of clusters increase for each loop run
         n_init=10,                  # We initialize ten runs for each foor  loop run
         max_iter=100,               # We set the maximimum number of iterations to 100
