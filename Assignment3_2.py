@@ -3,28 +3,25 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import random as rand
 
-# Importing the dataset
-df = pd.DataFrame(pd.read_csv('irisBinary.csv', sep=',', header=None))
-print(df.head)
-
 #Task 2.1 Is to create a perceptron which can handle binary classification 
-def createPerceptron(input, epochs, learningRate):
-    # Initializing random weights between 0 and 1 for each neuron 
-    variables = []
-    variables = input              # Initializing variables to the input for the first iteration
-    
+def createPerceptron(input, epochs, learningRate):  
+    # ! Defining vairalbes and initializing various components in the algorithm  
     weights = []
     for i in range(0,4):           # Initializing weights to random values between 0 and 1
         x = rand.random()
         weights.append(x)
     
+    variables = []                  # Variables will be the neuron values stored up 
     neurons = [0, 0, 0, 0]          # Initializing neurons
     results = []                    # Results is a list which will contain the results of each epoch
-                                    # For our case we will use batch learning so we will use all training samples in each epoch
     
     mse = 0                         # Mean squared error will update after each epoch
     bias = 0                        # Initializing bias to 0 since i have no clue wether or not i will need it 
-                                
+    
+    # ? Starting algorithm _________________________________________________________________
+    
+    variables = input              # Initializing variables to the input for the first iteration
+    
     # First we do forward propagation to get the output of the perceptron
     for i in range(0,4):
         neurons[i] = forwardPropagation(variables, neurons[i], weights, bias) # We do forward propagation for each neuron and get the output
@@ -38,9 +35,9 @@ def createPerceptron(input, epochs, learningRate):
     #Since we currently only have one layer we will funnel all neurons into one neuron which will give us the output
     output = 0
     results.append(forwardPropagation(neurons, output, weights, bias)) # We do forward propagation for the final neuron and get the output
-    
-    print(results)
-    
+
+    return results
+
     
     # Then we do back propagation to update the weights and bias
     #backPropagation(input, weights, bias)
@@ -72,8 +69,15 @@ def sigmoidFunction(attr):
 # Simple MSE Function which takes in the observed value, predicted value and number of observations
 def meanSquaredError(observedVal, perdictedVal, observations):
     return (1/observations)*sum((observedVal-perdictedVal)**2)
-    
+
+#* ###################################################################################################################
+
+# Importing the dataset
+df = pd.DataFrame(pd.read_csv('irisBinary.csv', sep=',', header=None))
+print(df.head)
+
+
 testInput = [5.1,3.5,1.4,0.2]
-createPerceptron(testInput, 0, 1)
-    
+output = createPerceptron(testInput, 0, 1)
+print(output)
 
