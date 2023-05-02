@@ -126,7 +126,6 @@ def updateWeights(weights, learningRate , output, targetValue, input): # Functio
     newWeights = vectorWeights + learningRate*((targetValue-output)*DerivedSigmoidFunction(vectorInput*weights))*vectorInput
     return newWeights
         
-
 ## Importing the dataset ################################################################################################
 df = pd.DataFrame(pd.read_csv('irisBinary.csv', sep=','))
 df.replace(('Iris-setosa', 'Iris-versicolor'), (0, 1), inplace=True)        # Labeling and making the data binary
@@ -137,17 +136,14 @@ dataset = df.drop(["Iris Class"], axis=1)                                   # Dr
 
 # Task 2.2 is to perform 5-fold cross validation on the dataset 
 # I have used an online tutorial to implement the sklearn cross validation function: https://towardsdatascience.com/train-test-split-and-cross-validation-in-python-80b61beca4b6 
-# Last visit 02.05.2023
-kfold = KFold(n_splits=5,random_state=None,  shuffle=False) # Creating the kfold object
-kf = kfold.split(dataset, targetValues) # Splitting the dataset into 5 folds
-    
+# Last visit 02.05.2023    
 learningRate = 0.01
 numOfEpoch = 1000
-
-
-#output = trainModel(dataset, targetValues, learningRate, numOfEpoch)
-#test = predictWithNN(dataset, targetValues)
 totalResults = 0
+
+kfold = KFold(n_splits=5,random_state=None,  shuffle=False) # Creating the kfold object
+kf = kfold.split(dataset, targetValues) # Splitting the dataset into 5 folds
+
 for i, (train_index, test_index) in enumerate(kf):
     print(f"Fold {i+1}:")    
     output = trainModel(dataset.iloc[train_index], targetValues.iloc[train_index], learningRate, numOfEpoch)
