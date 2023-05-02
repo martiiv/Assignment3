@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import random as rand
+from sklearn.model_selection import KFold # import KFold
+
 
 # Class for neurons, used to store weights associated with the neuron
 class neuron: 
@@ -16,6 +18,12 @@ class neuron:
         for i in range(0,4):           # Initializing weights to random values between 0 and 1
             x = rand.random()
             self.weights.append(x)
+
+neuron1 = neuron()                          # Initializing the neurons
+neuron2 = neuron()                         # Each neuron has 4 weights associated with it 
+neuron3 = neuron()                         # 3 from the input layer and one for the output neuron
+outputNeuron = neuron()                    # The output neuron has 3 weights associated with it
+    
 
 # ! Code explanation and HERE!!!!
 # ? Since the code is somewhat complex I will try to explain what is happening
@@ -36,7 +44,7 @@ class neuron:
 
 
 #Task 2.1 Is to create a perceptron which can handle binary classification 
-def createPerceptron(input, targetValues, learningRate, numOfEpoch):  
+def trainModel(input, targetValues, learningRate, numOfEpoch):  
     neuron1 = neuron()                          # Initializing the neurons
     neuron2 = neuron()                         # Each neuron has 4 weights associated with it 
     neuron3 = neuron()                         # 3 from the input layer and one for the output neuron
@@ -45,7 +53,7 @@ def createPerceptron(input, targetValues, learningRate, numOfEpoch):
     mse = []                                    # List for mean squared error
     
     outputNeuron.weights = [rand.random(), rand.random(), rand.random()] # Since output neuron has 3 inputs we need 3 weights instead of 4
-    
+    print(outputNeuron.weights)
     for j in range(numOfEpoch):
         for i in range(0, len(targetValues)):
             
@@ -73,9 +81,21 @@ def createPerceptron(input, targetValues, learningRate, numOfEpoch):
     plt.ylabel("Mean square error")
     plt.show()
     print(outputNeuron.inputValue)
+    return outputNeuron, neuron1, neuron2, neuron3
+
+def predictWithNN(x, y):
+    for i in range(len(x)):
+        neuron1.inputValue = activationFunction(x.iloc[i], neuron1.weights)
+        neuron2.inputValue = activationFunction(x.iloc[i], neuron2.weights)
+        neuron3.inputValue = activationFunction(x.iloc[i], neuron3.weights)
+        outputNeuron.inputValue = activationFunction([neuron1.inputValue, neuron2.inputValue, neuron3.inputValue], outputNeuron.weights)
         
-        
-                
+        if outputNeuron.inputValue >= 0.5:
+            print("Guess: Iris-versicolor actual value: ", y.iloc[i])
+            return 1
+        elif outputNeuron.inputValue < 0.5:
+            print("Guess: Iris-setosa actual value: ", y.iloc[i])
+            return 0
         
 # Function takes in input and weights and returns the output of one neuron by multiplying the input with asscoiated weights and adding the bias 
 # The output is then passed through the sigmoid function
@@ -114,7 +134,24 @@ targetValues = df["Iris Class"]
 dataset = df.drop(["Iris Class"], axis=1)                                   # Dropping the target value from the dataset
 #########################################################################################################################
 
+# Task 2.2 is to perform 5-fold cross validation on the dataset 
+# I have used an online tutorial to implement the sklearn cross validation function: https://towardsdatascience.com/train-test-split-and-cross-validation-in-python-80b61beca4b6 
+# Last visit 02.05.2023
+kfold = KFold(n_splits=10) # Creating the kfold object
+kf = kfold.split(dataset, targetValues) # Splitting the dataset into 5 folds
+    
 learningRate = 0.01
 numOfEpoch = 100
 
-output = createPerceptron(dataset, targetValues, learningRate, numOfEpoch)
+output = trainModel(dataset, targetValues, learningRate, numOfEpoch)
+print(outputNeuron.weights)
+#test = predictWithNN(dataset, targetValues)
+
+#for i, (train_index, test_index) in enumerate(kf):
+    #print(f"Fold {i}:")
+    #print(f"  Train: index={train_index}")
+    #print(f"  Test:  index={test_index}")
+
+
+
+#! Something wrong with output neurons weights probably line 74
