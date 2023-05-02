@@ -138,11 +138,11 @@ dataset = df.drop(["Iris Class"], axis=1)                                   # Dr
 # Task 2.2 is to perform 5-fold cross validation on the dataset 
 # I have used an online tutorial to implement the sklearn cross validation function: https://towardsdatascience.com/train-test-split-and-cross-validation-in-python-80b61beca4b6 
 # Last visit 02.05.2023
-kfold = KFold(n_splits=5) # Creating the kfold object
-kf = kfold.split(dataset) # Splitting the dataset into 5 folds
+kfold = KFold(n_splits=5,random_state=None,  shuffle=False) # Creating the kfold object
+kf = kfold.split(dataset, targetValues) # Splitting the dataset into 5 folds
     
 learningRate = 0.01
-numOfEpoch = 100
+numOfEpoch = 1000
 
 
 #output = trainModel(dataset, targetValues, learningRate, numOfEpoch)
