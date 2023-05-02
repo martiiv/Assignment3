@@ -15,10 +15,6 @@ class neuron:
                                     # [3] = input 4 weight
                                     # [4] = output weight
     
-        for i in range(0,4):           # Initializing weights to random values between 0 and 1
-            x = rand.random()
-            self.weights.append(x)
-
 neuron1 = neuron()                          # Initializing the neurons
 neuron2 = neuron()                         # Each neuron has 4 weights associated with it 
 neuron3 = neuron()                         # 3 from the input layer and one for the output neuron
@@ -45,15 +41,13 @@ outputNeuron = neuron()                    # The output neuron has 3 weights ass
 
 #Task 2.1 Is to create a perceptron which can handle binary classification 
 def trainModel(input, targetValues, learningRate, numOfEpoch):  
-    neuron1 = neuron()                          # Initializing the neurons
-    neuron2 = neuron()                         # Each neuron has 4 weights associated with it 
-    neuron3 = neuron()                         # 3 from the input layer and one for the output neuron
-    outputNeuron = neuron()                    # The output neuron has 3 weights associated with it
     
     mse = []                                    # List for mean squared error
+    neuron1.weights = [rand.random(), rand.random(), rand.random(), rand.random()] # Since output neuron has 3 inputs we need 3 weights instead of 4
+    neuron2.weights = [rand.random(), rand.random(), rand.random(), rand.random()] # Since output neuron has 3 inputs we need 3 weights instead of 4
+    neuron3.weights = [rand.random(), rand.random(), rand.random(), rand.random()] # Since output neuron has 3 inputs we need 3 weights instead of 4
     
     outputNeuron.weights = [rand.random(), rand.random(), rand.random()] # Since output neuron has 3 inputs we need 3 weights instead of 4
-    print(outputNeuron.weights)
     for j in range(numOfEpoch):
         for i in range(0, len(targetValues)):
             
@@ -101,10 +95,8 @@ def predictWithNN(x, y):
             if outputNeuron.inputValue == y.iloc[i]:
                 results.append(1)
         
-    total = sum(results)
-    print("Total correct predictions: ", total, "\n")
-    print("Total predictions: ", len(x), "\n")
-    print("Accuracy: ", total/len(x), "\n")
+    return sum(results)
+    
     
 # Function takes in input and weights and returns the output of one neuron by multiplying the input with asscoiated weights and adding the bias 
 # The output is then passed through the sigmoid function
@@ -155,10 +147,14 @@ numOfEpoch = 100
 
 #output = trainModel(dataset, targetValues, learningRate, numOfEpoch)
 #test = predictWithNN(dataset, targetValues)
-
+totalResults = 0
 for i, (train_index, test_index) in enumerate(kf):
     print(f"Fold {i+1}:")    
     output = trainModel(dataset.iloc[train_index], targetValues.iloc[train_index], learningRate, numOfEpoch)
     
-    test = predictWithNN(dataset.iloc[test_index], targetValues.iloc[test_index])
+    totalResults = totalResults + predictWithNN(dataset.iloc[test_index], targetValues.iloc[test_index])
+    
+print("KFOLD finished, dataaset entries = 100 \n")
+print("Total correct predictions: ", totalResults)
+print("Model accuracy: ", totalResults/100, "%")
 
