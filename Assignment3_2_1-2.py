@@ -69,8 +69,8 @@ def trainModel(input, targetValues, learningRate, numOfEpoch):
         
             neuron3.inputValue = activationFunction(variables, neuron3.weights)
             neuron3.weights = updateWeights(neuron3.weights, learningRate, neuron3.inputValue, target, variables) # Updating the weights for the neuron
-        
             outputNeuron.inputValue = activationFunction([neuron1.inputValue, neuron2.inputValue, neuron3.inputValue], outputNeuron.weights)
+            
             outputNeuron.weights = updateWeights(outputNeuron.weights, learningRate, outputNeuron.inputValue, target, [neuron1.inputValue, neuron2.inputValue, neuron3.inputValue]) # Updating the weights for the neuron
         
         mse.append(meanSquaredError(target, outputNeuron.inputValue, numOfEpoch)) 
@@ -80,11 +80,10 @@ def trainModel(input, targetValues, learningRate, numOfEpoch):
     plt.xlabel("Epoch")
     plt.ylabel("Mean square error")
     plt.show()
-    print(outputNeuron.inputValue)
     return outputNeuron, neuron1, neuron2, neuron3
 
 def predictWithNN(x, y):
-    for i in range(len(x)):
+    for i in range(0, len(x)):
         neuron1.inputValue = activationFunction(x.iloc[i], neuron1.weights)
         neuron2.inputValue = activationFunction(x.iloc[i], neuron2.weights)
         neuron3.inputValue = activationFunction(x.iloc[i], neuron3.weights)
@@ -101,7 +100,7 @@ def predictWithNN(x, y):
 # The output is then passed through the sigmoid function
 def activationFunction(input, weights): 
     processedInput =  []
-    for i in range(len(weights)):                            # For each neuron we look at one feature (For this case Sepal length, sepal width, petal length and petal width)                          
+    for i in range(len(input)):                            # For each neuron we look at one feature (For this case Sepal length, sepal width, petal length and petal width)                          
         newValue = input[i]*weights[i]              # Each feature gets multiplied with the weight associated with the neuron
         processedInput.append(newValue)             # We store the value and apply the sigmoid function to it
     return sigmoidFunction(sum(processedInput))        
@@ -144,8 +143,7 @@ learningRate = 0.01
 numOfEpoch = 100
 
 output = trainModel(dataset, targetValues, learningRate, numOfEpoch)
-print(outputNeuron.weights)
-#test = predictWithNN(dataset, targetValues)
+test = predictWithNN(dataset, targetValues)
 
 #for i, (train_index, test_index) in enumerate(kf):
     #print(f"Fold {i}:")
