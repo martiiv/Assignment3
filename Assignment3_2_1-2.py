@@ -70,13 +70,9 @@ def trainModel(input, targetValues, learningRate, numOfEpoch):
         mse.append(meanSquaredError(target, outputNeuron.inputValue, numOfEpoch)) 
            
 
-    #plt.plot(range(0,numOfEpoch), mse)
-    #plt.xlabel("Epoch")
-    #plt.ylabel("Mean square error")
-    #plt.show()
     return outputNeuron, neuron1, neuron2, neuron3
 
-def predictWithNN(x, y):
+def predictWithNN(x, y, ):
     results = []
     
     for i in range(0, len(x)):
@@ -134,10 +130,8 @@ targetValues = df["Iris Class"]
 dataset = df.drop(["Iris Class"], axis=1)                                   # Dropping the target value from the dataset
 #########################################################################################################################
 
-# Task 2.2 is to perform 5-fold cross validation on the dataset 
-# I have used an online tutorial to implement the sklearn cross validation function: https://towardsdatascience.com/train-test-split-and-cross-validation-in-python-80b61beca4b6 
-# Last visit 02.05.2023    
-learningRate = 0.01
+# Task 2.2 is to perform 5-fold cross validation on the dataset  
+learningRate = 1
 numOfEpoch = 1000
 totalResults = 0
 
@@ -147,6 +141,7 @@ kf = kfold.split(dataset, targetValues) # Splitting the dataset into 5 folds
 for i, (train_index, test_index) in enumerate(kf):
     print(f"Fold {i+1}:")    
     output = trainModel(dataset.iloc[train_index], targetValues.iloc[train_index], learningRate, numOfEpoch)
+    
     
     totalResults = totalResults + predictWithNN(dataset.iloc[test_index], targetValues.iloc[test_index])
     
